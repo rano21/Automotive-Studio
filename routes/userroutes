@@ -1,0 +1,19 @@
+const express = require('express')
+const router = express.Router()
+
+const fuction = require('../controllers/fuction')
+
+router.get('/', fuction.returnname);
+router.get('/feedback' , fuction.feedback);
+router.get('/usedcars' , fuction.usedcars);
+router.get('/cars' , fuction.cars);
+router.get('/bikes' , fuction.bikes);
+router.get('/autoparts', fuction.autoparts);
+router.get('/profile', fuction.profile);
+router.get('/home', fuction.home);
+router.get('/login', fuction.login);
+router.get('/aboutus', fuction.aboutus);
+
+
+module.exports = router
+       
