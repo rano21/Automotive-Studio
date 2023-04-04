@@ -7,6 +7,7 @@ const Insurance = require("../models/insurance.models");
 const Cookies = require("cookies");
 const jwtToken = require("jsonwebtoken");
 const sequelize = require("../config");
+const {Op} = require('sequelize');
 
 
 ////---------------------ADD----------------
@@ -47,7 +48,7 @@ const addInBikesTable = (req, res) => {
         companyName: req.body.companyName,
         color: req.body.color,
         model: req.body.model,
-        price: req.body.price,
+        price: req.body.price
       })
         .then((rs) => {
           console.log(rs);
@@ -130,10 +131,10 @@ const addInSparePartsTable = (req, res) => {
         })
         .then((rs) => {
           console.log(rs);
-          res.cookie("pareparts" ," added");
-          var keys = ['keyboard cat']
-          var cookies = new Cookies(req, res, { keys: keys });
-          cookies.set("LastVisit", new Date().toISOString(), { signed: true }); // Set the cookie to a value
+          // res.cookie("pareparts" ," added");
+          // var keys = ['keyboard cat']
+          // var cookies = new Cookies(req, res, { keys: keys });
+          // cookies.set("LastVisit", new Date().toISOString(), { signed: true }); // Set the cookie to a value
           res.send(rs);
         })
         .catch((error) => {
@@ -178,7 +179,7 @@ const deleteFomUser = (req, res) => {
     .then(() => {
       User.destroy({
         where: {
-          id: req.body.iid,
+          id: req.body.id,
         },
       })
         .then(() => {
@@ -469,7 +470,7 @@ const upadteInsurance = (req, res) => {
     });
 };
 
-////-------------------Retrive------------------
+////-------------------Retrive by id------------------
 
 const signInUser = (req, res) => {
   sequelize
@@ -501,28 +502,6 @@ const signInUser = (req, res) => {
     });
 };
 
-const retriveteBikes = (req, res) => {
-  sequelize
-    .sync()
-    .then(() => {
-      Bikes.findOne({
-        where: {
-          id: req.send.id,
-        },
-      })
-        .then((rs) => {
-          console.log(rs);
-          res.send("data got");
-        })
-        .catch((error) => {
-          console.error("Failed to retrieve data : ", error);
-        });
-    })
-    .catch((error) => {
-      console.error("Unable to create table : ", error);
-    });
-};
-
 const signInAdmin = (req, res) => {
   sequelize
     .sync()
@@ -551,6 +530,30 @@ const signInAdmin = (req, res) => {
       console.error("Unable to create table : ", error);
     });
 };
+
+
+const retriveteBikes = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+      Bikes.findOne({
+        where: {
+          id: req.send.id,
+        },
+      })
+        .then((rs) => {
+          console.log(rs);
+          res.send("data got");
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
 
 const retriveteInsurance = (req, res) => {
   sequelize
@@ -598,6 +601,8 @@ const retriveteCars = (req, res) => {
     });
 };
 
+
+//----------------------pagination
 const retriveteSpareParts = (req, res) => {
   sequelize
     .sync()
@@ -622,6 +627,250 @@ const retriveteSpareParts = (req, res) => {
     });
 };
 
+const retriveteallfrombikes = (req, res) => {
+  const { page } = req.query;
+  const { limit, offset } = getPagination(page);
+ sequelize
+   .sync()
+   .then(() => {
+     Bikes.findAll( { limit , offset})
+       .then((data) => {      
+         res.send(data);
+       })
+       .catch((error) => {
+         console.error("Failed to retrieve data : ", error);
+       });
+   })
+   .catch((error) => {
+     console.error("Unable to create table : ", error);
+   });
+};
+
+const retriveteallfromspareparts = (req, res) => {
+  const { page } = req.query;
+  const { limit, offset } = getPagination(page);
+ sequelize
+   .sync()
+   .then(() => {
+     spareParts.findAll( { limit , offset})
+       .then((data) => {      
+         res.send(data);
+       })
+       .catch((error) => {
+         console.error("Failed to retrieve data : ", error);
+       });
+   })
+   .catch((error) => {
+     console.error("Unable to create table : ", error);
+   });
+};
+
+const retriveteallfromcars = (req, res) => {
+  const { page } = req.query;
+  const { limit, offset } = getPagination(page);
+ sequelize
+   .sync()
+   .then(() => {
+     Cars.findAll( { limit , offset})
+       .then((data) => {      
+         res.send(data);
+       })
+       .catch((error) => {
+         console.error("Failed to retrieve data : ", error);
+       });
+   })
+   .catch((error) => {
+     console.error("Unable to create table : ", error);
+   });
+};
+
+const retriveteallfromuser = (req, res) => {
+   const { page } = req.query;
+   const { limit, offset } = getPagination(page);
+  sequelize
+    .sync()
+    .then(() => {
+      User.findAll( { limit , offset})
+        .then((data) => {      
+          res.send(data);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
+const retriveteallfrominsurance = (req, res) => {
+  const { page } = req.query;
+  const { limit, offset } = getPagination(page);
+ sequelize
+   .sync()
+   .then(() => {
+     Insurance.findAll( { limit , offset})
+       .then((data) => {      
+         res.send(data);
+       })
+       .catch((error) => {
+         console.error("Failed to retrieve data : ", error);
+       });
+   })
+   .catch((error) => {
+     console.error("Unable to create table : ", error);
+   });
+};
+
+
+const getPagination = (page) => {
+  const limit = 5;
+  const offset = page ? page * limit : 0;
+  return { limit, offset };
+};
+
+
+
+//-----------------------Filteration---------------
+const filterCars = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+        Cars.findAll({
+        where: {
+          price: {
+            [Op.between]: [req.body.fromPrice, req.body.toPrice]
+          }
+        }
+      })
+        .then((data) => {
+          console.log(data);
+          res.send(data);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
+
+const filterUsers = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+        User.findAll({
+        where: {
+          id: {
+            [Op.between]: [req.body.fromID, req.body.toID]
+          }
+        }
+      })
+        .then((data) => {
+          console.log(data);
+          res.send(data);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
+
+const filterBikes = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+        Bikes.findAll({
+        where: {
+          price: {
+            [Op.between]: [req.body.fromPrice, req.body.toPrice]
+          }
+        }
+      })
+        .then((data) => {
+          console.log(data);
+          res.send(data);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
+
+const filterSpareParts = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+        spareParts.findAll({
+        where: {
+          picePkr: {
+            [Op.between]: [req.body.fromPrice, req.body.toPrice]
+          }
+        }
+      })
+        .then((data) => {
+          console.log(data);
+          res.send(data);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
+
+const filterInsurance = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+        Insurance.findAll({
+        where: {
+          amount: {
+            [Op.between]: [req.body.fromPrice, req.body.toPrice]
+          }
+        }
+      })
+        .then((data) => {
+          console.log(data);
+          res.send(data);
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Insurance.belongsTo(Cars , Bikes)
 // Admin.hasMany(Bikes , Cars , spareParts , Insurance)
 // Cars.hasMany(spareParts)
@@ -629,6 +878,11 @@ const retriveteSpareParts = (req, res) => {
 // User.belongsToMany(Cars, { through: 'ID'} )
 // User.belongsToMany(Bikes, { through: 'ID'} )
 // User.belongsToMany(spareParts, { through: 'ID'} )
+
+
+
+
+
 
 module.exports = {
   signUpUser,
@@ -655,4 +909,14 @@ module.exports = {
   retriveteInsurance,
   deleteFomInsurance,
   upadteInsurance,
+  retriveteallfrombikes,
+  retriveteallfromspareparts,
+  retriveteallfromcars,
+  retriveteallfromuser,
+  retriveteallfrominsurance,
+  filterBikes,
+  filterCars,
+  filterInsurance,
+  filterSpareParts,
+  filterUsers
 };
