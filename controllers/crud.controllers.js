@@ -532,7 +532,7 @@ const signInAdmin = (req, res) => {
 };
 
 
-const retriveteBikes = (req, res) => {
+const retriveteBikesByID = (req, res) => {
   sequelize
     .sync()
     .then(() => {
@@ -555,7 +555,7 @@ const retriveteBikes = (req, res) => {
 };
 
 
-const retriveteInsurance = (req, res) => {
+const retriveteInsuranceByID = (req, res) => {
   sequelize
     .sync()
     .then(() => {
@@ -577,7 +577,33 @@ const retriveteInsurance = (req, res) => {
     });
 };
 
-const retriveteCars = (req, res) => {
+const retriveteCarsByID = (req, res) => {
+  sequelize
+    .sync()
+    .then(() => {
+      User.findOne({
+        where: {
+          id: req.body.id,
+        },
+      })
+        .then((rs) => {
+          console.log(rs);
+          res.send("data get");
+        })
+        .catch((error) => {
+          console.error("Failed to retrieve data : ", error);
+          res.send("error");
+        });
+    })
+    .catch((error) => {
+      console.error("Unable to create table : ", error);
+      res.send("table error");
+    });
+};
+
+
+
+const retriveteSparePartsByID = (req, res) => {
   sequelize
     .sync()
     .then(() => {
@@ -603,31 +629,7 @@ const retriveteCars = (req, res) => {
 
 
 //----------------------pagination
-const retriveteSpareParts = (req, res) => {
-  sequelize
-    .sync()
-    .then(() => {
-      User.findOne({
-        where: {
-          id: req.body.id,
-        },
-      })
-        .then((rs) => {
-          console.log(rs);
-          res.send("data get");
-        })
-        .catch((error) => {
-          console.error("Failed to retrieve data : ", error);
-          res.send("error");
-        });
-    })
-    .catch((error) => {
-      console.error("Unable to create table : ", error);
-      res.send("table error");
-    });
-};
-
-const retriveteallfrombikes = (req, res) => {
+const paginatebikes = (req, res) => {
   const { page } = req.query;
   const { limit, offset } = getPagination(page);
  sequelize
@@ -646,7 +648,7 @@ const retriveteallfrombikes = (req, res) => {
    });
 };
 
-const retriveteallfromspareparts = (req, res) => {
+const paginatespareparts = (req, res) => {
   const { page } = req.query;
   const { limit, offset } = getPagination(page);
  sequelize
@@ -665,7 +667,7 @@ const retriveteallfromspareparts = (req, res) => {
    });
 };
 
-const retriveteallfromcars = (req, res) => {
+const paginatecars = (req, res) => {
   const { page } = req.query;
   const { limit, offset } = getPagination(page);
  sequelize
@@ -684,7 +686,7 @@ const retriveteallfromcars = (req, res) => {
    });
 };
 
-const retriveteallfromuser = (req, res) => {
+const paginateuser = (req, res) => {
    const { page } = req.query;
    const { limit, offset } = getPagination(page);
   sequelize
@@ -703,7 +705,7 @@ const retriveteallfromuser = (req, res) => {
     });
 };
 
-const retriveteallfrominsurance = (req, res) => {
+const paginateinsurance = (req, res) => {
   const { page } = req.query;
   const { limit, offset } = getPagination(page);
  sequelize
@@ -894,26 +896,26 @@ module.exports = {
   upadteCars,
   upadteSpareParts,
   upadteUsers,
-  retriveteCars,
-  retriveteSpareParts,
+  retriveteCarsByID,
+  retriveteSparePartsByID,
   signInUser,
   signInAdmin,
   addAdmin,
   deleteFomAdmin,
   upadteAdmin,
   addInBikesTable,
-  retriveteBikes,
+  retriveteBikesByID,
   deleteFomBikes,
   upadteBikes,
   addInsuranceTable,
-  retriveteInsurance,
+  retriveteInsuranceByID,
   deleteFomInsurance,
   upadteInsurance,
-  retriveteallfrombikes,
-  retriveteallfromspareparts,
-  retriveteallfromcars,
-  retriveteallfromuser,
-  retriveteallfrominsurance,
+  paginatebikes,
+  paginatespareparts,
+  paginatecars,
+  paginateuser,
+  paginateinsurance,
   filterBikes,
   filterCars,
   filterInsurance,
