@@ -14,9 +14,10 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use('/user', userroute)
 app.use('/admin', adminroute)
+app.get('*', function(req, res){
+    res.status(404).send('galat url enter kar rha hy');
+  });
 
 app.listen(port, hostname, () => {
     console.log(`Running At http://${hostname}:${port}/`);
 })
-
-
