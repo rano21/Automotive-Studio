@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const {isUser} = require('../midlleWare/authJwt.Md')
-const fuction = require('../controllers/crud.controllers')
+const fuction = require('../controllers/user.Controllers')
+const check = require("../midlleWare/checkDuplicate")
 
-router.post('/signUpUser' , fuction.signUpUser);
-router.get('/signIn' , fuction.signInUser);
+router.post('/signUpUser' , check , fuction.signUpUser);
+router.get('/signIn' , check , fuction.signInUser);
 
 router.post('/addcar' , isUser , fuction.addInCarsTable)
 router.post('/addbikes' , isUser ,  fuction.addInBikesTable)
@@ -35,7 +36,7 @@ router.delete('/deletespareparts' , isUser, fuction.deleteFomSpareParts)
 
 
 router.get('*', function(req, res){
-    res.status(404).send('galat url enter kar rha hy');
+    res.status(404).send('404 error: page not found');
   });
 
 module.exports = router
