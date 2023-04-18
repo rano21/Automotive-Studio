@@ -27,7 +27,7 @@ const signUpUser = async(req, res) => {
         })
           .then((user) => {
             console.log(user);
-            res.send(user);
+            res.status(200).send(user);
           })
           .catch((error) => {
             console.error("Failed to create a new record : ", error);
