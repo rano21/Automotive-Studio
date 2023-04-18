@@ -49,8 +49,20 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch `git push origin feature/AmazingFeature`
 5. Open a Pull Request
 
+## Document
+use postman api collection to run project
+get postmen collection from this link
+https://documenter.getpostman.com/view/26469820/2s93Xzx2oz
 
 ## How to use
+
+1. sign in
+2. if dont have account then sign up and then sign in
+3. whenever you sign in you will get a token. Use that token in every module
+4. place token in headers "authToken" 
+5. if riole===admin then the admin token will be placed otherwise usertoken
+
+
 
 ### Admin Sign in
 ![Screenshot (30)](https://user-images.githubusercontent.com/125240255/232673050-e2cfe278-5b49-4c3e-9143-cd093382b11f.png)
